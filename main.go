@@ -4,10 +4,9 @@ import (
 	"flag"
 	_ "net/http/pprof"
 
+	"github.com/golang/glog"
 	"github.com/sezzle-calculator/gin"
-	//"github.com/sezzle-calculator/gorm"
-
-	//"github.com/golang/glog"
+	"github.com/sezzle-calculator/gorm"
 )
 
 func main() {
@@ -15,13 +14,12 @@ func main() {
 	flag.Parse()
 	flag.Lookup("alsologtostderr").Value.Set("true")
 
-	/*//Initalize our db.
+	//Initalize our db.
 	glog.Info("Initalizing db...")
 	db, err := gorm.InitDB()
 	if err != nil {
 		glog.Fatal("Could not initalize db", err.Error())
 	}
-
 
 	//Defer this so that if our application exits, we close the db.
 	//Double check this.
@@ -34,7 +32,6 @@ func main() {
 	if err != nil {
 		glog.Fatal("Could not run object migrations.")
 	}
-	*/
 
 	gin.Run()
 

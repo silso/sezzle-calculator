@@ -6,15 +6,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"flag"
+	"github.com/golang/glog"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"github.com/golang/glog"
 
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
+
 func init() {
 	if testing.Verbose() {
 		flag.Set("alsologtostderr", "true")
@@ -28,7 +29,7 @@ var _ = Describe("SignupHandler", func() {
 	var (
 		jsonErr error
 		// newCustomerToken string
-	// phoneNumber      string = "1234567898"
+		// phoneNumber      string = "1234567898"
 	)
 
 	BeforeEach(func() {
@@ -81,9 +82,9 @@ var _ = Describe("SignupHandler", func() {
 
 			It("should return an error", func() {
 				Ω(response.Code).Should(Equal(http.StatusOK))
-				// Ω(response.HeaderMap["Content-Type"][0]).Should(Equal("application/json; charset=utf-8"))
-				// Ω(jsonErr).ShouldNot(HaveOccurred())
-				// Ω(responseKeyValue).ShouldNot(BeEmpty())
+				Ω(response.HeaderMap["Content-Type"][0]).Should(Equal("application/json; charset=utf-8"))
+				Ω(jsonErr).ShouldNot(HaveOccurred())
+				Ω(responseKeyValue).ShouldNot(BeEmpty())
 			})
 		})
 
@@ -100,10 +101,10 @@ var _ = Describe("SignupHandler", func() {
 
 			It("should ask for an OTP", func() {
 				Ω(response.Code).Should(Equal(http.StatusOK))
-				// Ω(response.HeaderMap["Content-Type"][0]).Should(Equal("application/json; charset=utf-8"))
-				// Ω(jsonErr).ShouldNot(HaveOccurred())
-				// Ω(responseKeyValue).ShouldNot(BeEmpty())
-				// Ω(responseKeyValue).Should(HaveKeyWithValue("name", "Test Name"))
+				Ω(response.HeaderMap["Content-Type"][0]).Should(Equal("application/json; charset=utf-8"))
+				Ω(jsonErr).ShouldNot(HaveOccurred())
+				Ω(responseKeyValue).ShouldNot(BeEmpty())
+				Ω(responseKeyValue).Should(HaveKeyWithValue("name", "Test Name"))
 			})
 		})
 	})

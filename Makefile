@@ -30,7 +30,8 @@ fresh:
 test:
 
 	# Run all Gin tests with ginkgo
-	export ENVIRONMENT=testing && ginkgo -r -v -noisyPendings=false --nodes=1 -notify --progress --trace ./gin | grep -v vendor
+	# -notify removed'
+	export ENVIRONMENT=testing && ginkgo -r -v -noisyPendings=false --nodes=1 --progress --trace ./gin | grep -v vendor
 
 # Runs all tests
 test-all:

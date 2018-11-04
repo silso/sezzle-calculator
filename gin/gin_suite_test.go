@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-  "github.com/golang/glog"
+	"github.com/golang/glog"
 	"github.com/sezzle-calculator/config"
-  testapi "github.com/sezzle-calculator/gin"
+	testapi "github.com/sezzle-calculator/gin"
 	testgorm "github.com/sezzle-calculator/gorm"
 	"testing"
 

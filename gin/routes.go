@@ -1,8 +1,8 @@
 package gin
 
 import (
+	"github.com/sezzle-calculator/config"
 	"time"
-  "github.com/sezzle-calculator/config"
 
 	"github.com/gin-gonic/gin"
 	cors "github.com/itsjamie/gin-cors"
@@ -18,9 +18,9 @@ func InitRoutes() *gin.Engine {
 
 	// Apply the middleware to the router (works with groups too)
 	router.Use(cors.Middleware(cors.Config{
-		Origins:         "*", //cfg.Origins,
-		Methods:         "GET, PUT, POST, DELETE",
-		RequestHeaders:  "Origin, Authorization, Content-Type",
+		Origins:        "*", //cfg.Origins,
+		Methods:        "GET, PUT, POST, DELETE",
+		RequestHeaders: "Origin, Authorization, Content-Type",
 		// ExposedHeaders:  "",
 		MaxAge:          50 * time.Second,
 		Credentials:     true,
@@ -40,14 +40,11 @@ func InitRoutes() *gin.Engine {
 	return router
 }
 
-
 //setUserRoutes :
 func setUserRoutes(g *gin.RouterGroup) {
-  g.POST("/user")
+	g.POST("/user")
 }
 
 func setDebugRoutes(g *gin.RouterGroup) {
 	g.GET("/test")
 }
-
-

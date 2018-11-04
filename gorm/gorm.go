@@ -6,12 +6,11 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/jinzhu/gorm"
-  "github.com/sezzle-calculator/config"
+	"github.com/sezzle-calculator/config"
 
 	// recommended by gorm to have this blank import
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
-
 
 func init() {
 }
@@ -37,6 +36,8 @@ func InitDB() (*gorm.DB, error) {
 
 	//Attempt to open a new connect to the db
 	glog.Info("Opening a connection to the db...")
+	fmt.Println(dbURL)
+	fmt.Println(config.DbDriver)
 	db, err := gorm.Open(config.DbDriver, dbURL)
 	if err != nil {
 		glog.Info("Couldn't open a connection to the db!", err)

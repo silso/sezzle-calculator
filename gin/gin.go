@@ -1,7 +1,7 @@
 package gin
 
 import (
-  "github.com/sezzle-calculator/config"
+	"github.com/sezzle-calculator/config"
 	"strconv"
 
 	"github.com/caarlos0/env"
