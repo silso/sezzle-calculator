@@ -14,6 +14,7 @@ func main() {
 	flag.Parse()
 	flag.Lookup("alsologtostderr").Value.Set("true")
 
+	/*
 	//Initalize our db.
 	glog.Info("Initalizing db...")
 	db, err := gorm.InitDB()
@@ -32,6 +33,7 @@ func main() {
 	if err != nil {
 		glog.Fatal("Could not run object migrations.")
 	}
+	*/
 
 	gin.Run()
 
