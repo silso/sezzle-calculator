@@ -4,9 +4,9 @@ import (
 	"flag"
 	_ "net/http/pprof"
 
-	"github.com/golang/glog"
+	//"github.com/golang/glog"
 	"github.com/sezzle-calculator/gin"
-	"github.com/sezzle-calculator/gorm"
+	//"github.com/sezzle-calculator/gorm"
 )
 
 func main() {

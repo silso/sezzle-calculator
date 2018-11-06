@@ -1,28 +1,61 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+class App extends React.Component {
+	render() {
+		return <Calculator/>;
+	}
+}
 
-class App extends Component {
+class MathLog extends React.Component {
+	constructor(props) {
+		super(props);
+		this.props.mathLog = [];
+	}
+
+	render() {
+		const list = this.props.mathLog.map((math, num) => {
+			return <p>{`${num}: ${math}`}</p>
+		});
+		console.log("math log: ", list);
+		return (
+			<div>{list}</div>
+		);
+	}
+}
+
+class Calculator extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			mathLog: [],
+		}
+		this.submit = this.submit.bind(this);
+	}
+
+	submit(e) {
+		e.preventDefault();
+		let mathMessage = (new FormData(e.target)).get("mathInput");
+		$.post(
+			"/calculator-post/",
+			{mathToServer: mathMessage},
+			(function(data) {
+				this.state.mathLog.push(data.mathToClients);
+				this.setState({mathLog: this.state.mathLog});
+			}).bind(this),
+			"json"
+		);
+	}
+	
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+			<div>
+				<h1>Calculater</h1>
+				<form autocomplete="off" onSubmit={this.submit}>
+					<input type="text" name="mathInput" placeholder="feed me math"/>
+					<input type="submit" value="="/>
+				</form>
+				<MathLog mathLog={this.state.mathLog}/>
+			</div>
     );
   }
 }
 
-export default App;
+ReactDOM.render(<App />, document.getElementById("app"));
