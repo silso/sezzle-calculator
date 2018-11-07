@@ -4,6 +4,7 @@ github.com/caarlos0/env v0.0.0-20181024121956-515df9e9ee27/go.mod h1:tdCsowwCzML
 github.com/campoy/embedmd v0.0.0-20171205015432-c59ce00e0296/go.mod h1:/dBk8ICkslPCmyRdn4azP+QvBxL6Eg3EYxUGI9xMMFw=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/dustin/go-broadcast v0.0.0-20171205050544-f664265f5a66 h1:QnnoVdChKs+GeTvN4rPYTW6b5U6M3HMEvQ/+x4IGtfY=
 github.com/dustin/go-broadcast v0.0.0-20171205050544-f664265f5a66/go.mod h1:kTEh6M2J/mh7nsskr28alwLCXm/DSG5OSA/o31yy2XU=
 github.com/fsnotify/fsnotify v0.0.0-20180830220226-ccc981bf8038/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/fsnotify/fsnotify v1.4.7 h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV9I=
