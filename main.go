@@ -14,6 +14,8 @@ func main() {
 	flag.Parse()
 	flag.Lookup("alsologtostderr").Value.Set("true")
 
+	//could not get go mysql to connect to my SQL server, so no db was used
+	/*-------------------------------------------------------------------*/
 	/*
 	//Initalize our db.
 	glog.Info("Initalizing db...")
@@ -34,6 +36,7 @@ func main() {
 		glog.Fatal("Could not run object migrations.")
 	}
 	*/
+	/*-------------------------------------------------------------------*/
 
 	gin.Run()
 

@@ -9,6 +9,8 @@ import (
 	"github.com/golang/glog"
 )
 
+//chris r: all of this is unchanged boilerplate
+
 var (
 	router *gin.Engine
 	cfg    configE
