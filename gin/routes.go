@@ -2,7 +2,7 @@ package gin
 
 import (
 	//"github.com/sezzle-calculator/config"
-	"time"
+	//"time"
 
 	"github.com/gin-gonic/gin"
 	//cors "github.com/itsjamie/gin-cors"
@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/contrib/static"
 	"io"
 	"fmt"
+	"github.com/dustin/go-broadcast"
 )
 
 const MATH_LOG_SIZE = 10
@@ -17,10 +18,13 @@ var mathLog [MATH_LOG_SIZE]string
 var mathLogIdx int
 var mathLogUpdated bool
 
+var br broadcast.Broadcaster
+
 // InitRoutes : Creates all of the routes for our application and returns a router
 func InitRoutes() *gin.Engine {
 	mathLogIdx = 0
 	mathLogUpdated = false
+	br = broadcast.NewBroadcaster(10)
 
 	router := gin.New()
 
@@ -31,6 +35,7 @@ func InitRoutes() *gin.Engine {
 
 	router.GET("/", handleMainGet)
 	router.POST("/calculator-post", handlePost)
+	router.POST("/first-post", handleFirstPost)
 	router.GET("/stream", handleStream)
 
 /*
@@ -76,36 +81,28 @@ func handlePost(c *gin.Context) {
 	}
 	mathLogUpdated = true
 	fmt.Println(mathLog)
+	br.Submit(mathToClients)
+}
+
+func handleFirstPost(c *gin.Context) {
 	c.JSON(
 		200,
-		gin.H{"mathToClients": mathToClients},
+		gin.H{"mathLog": mathLog},
 	)
 }
 
 func handleStream(c *gin.Context) {
-	chanStream := make(chan string)
-	go func() {
-		defer close(chanStream)
-		if mathLogUpdated {
-			mathLogUpdated = false
-			chanStream <- "START\n"
-			for i:= 0; i < MATH_LOG_SIZE; i++ {
-				if len(mathLog[i]) == 0 {
-					break;
-				}
-				appendedMathLog := make([]string, 100)
-				appendedMathLog = append(appendedMathLog, "\n")
-				chanStream <- mathLog[i]
-				time.Sleep(time.Millisecond *1)
-			}
-			chanStream <- "END\n"
-		} else {
-			chanStream <- "IGNORE\n"
-		}
-		time.Sleep(time.Second *1)
+	b := br
+	listener := make(chan interface{})
+	b.Register(listener)
+
+	defer func() {
+		b.Unregister(listener)
+		close(listener)
 	}()
+
 	c.Stream(func(w io.Writer) bool {
-		if msg, ok := <-chanStream; ok {
+		if msg, ok := <-listener; ok {
 			c.SSEvent("message", msg)
 			return true
 		}

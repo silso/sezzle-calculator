@@ -11,8 +11,9 @@ class MathLog extends React.Component {
 	}
 
 	render() {
-		const list = this.props.mathLog.map((math, num) => {
-			return <p>{`${num}: ${math}`}</p>
+		const reverseLog = this.props.mathLog.slice(0).reverse();
+		const list = reverseLog.map((math, num) => {
+			return <p>{math}</p>
 		});
 		console.log("math log: ", list);
 		return (
@@ -26,36 +27,52 @@ class Calculator extends React.Component {
 		super(props);
 		this.state = {
 			mathLog: [],
-			newMathLog: []
-			reading: false,
 		}
+
+		$.post(
+			"/first-post/",
+			{},
+			data => {
+				//remove empty math logs
+				for (let i = 0; i < 10; i++) {
+					if (data.mathLog[i] == "") {
+						data.mathLog.splice(i)
+						break;
+					}
+				}
+				this.setState({mathLog: data.mathLog});
+			},
+			"json"
+		);
+
 		this.submit = this.submit.bind(this);
 		let source = new EventSource("http://localhost:10000/stream");
-		source.addEventListener('message', function(e) {
+		source.addEventListener('message', e => {
 		  console.log("sse: ", e.data);
-			if (e.data === "START") {
-				this.setState({reading: true, newMathLog: []})
+			let pushed = this.state.mathLog.concat(e.data);
+			if (pushed.length > 10) {
+				pushed.splice(0, 1);
 			}
-			else if (e.data === "IGNORE") {
-				this.setState({reading: false})
-			}
-			else if (this.state.reading) {
-				this.state.newMathLog.push(e.data)
-			}
+			this.setState({mathLog: pushed});
 		}, false);
 	}
 
 	submit(e) {
 		e.preventDefault();
-		let mathMessage = (new FormData(e.target)).get("mathInput");
+		let form = new FormData(e.target);
+		let mathMessage = form.get("mathInput");
+		let arithmeticRegex = /^(\d+(\.\d+)?)([-+*/](\d+(\.\d+)?))*$/;
+		if (!mathMessage.match(arithmeticRegex)) {
+			console.log("bad math");
+			return;
+		}
+		//oooo spooky eval
+		let answer = eval(mathMessage);
+		mathMessage += " = " + answer;
+		document.getElementById("mathInput").value = "";
 		$.post(
 			"/calculator-post/",
 			{mathToServer: mathMessage},
-			/*(function(data) {
-				this.state.mathLog.push(data.mathToClients);
-				this.setState({mathLog: this.state.mathLog});
-			}).bind(this),
-			"json"*/
 		);
 	}
 	
@@ -64,7 +81,7 @@ class Calculator extends React.Component {
 			<div>
 				<h1>Calculator</h1>
 				<form autocomplete="off" onSubmit={this.submit}>
-					<input type="text" name="mathInput" placeholder="feed me math"/>
+					<input type="text" id="mathInput" name="mathInput" placeholder="feed me math"/>
 					<input type="submit" value="="/>
 				</form>
 				<MathLog mathLog={this.state.mathLog}/>
